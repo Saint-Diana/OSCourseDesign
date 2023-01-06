@@ -15,7 +15,7 @@ public class MemoryAllocation {
         Memory my = new Memory(memorySize, blockSize);
         while (true) {
             System.out.println("请选择以下操作：");
-            System.out.print("1.分配内存\n2.释放内存\n3.展示分区状况\n4.展示进程对应段表\n5.退出程序\n");
+            System.out.print("1.分配内存\n2.释放内存\n3.展示分区状况\n4.展示进程对应段表\n5.展示当前队列中的内存块号\n6.退出程序\n");
             System.out.print("输入：");
             int n = sc.nextInt();
             switch (n) {
@@ -50,6 +50,10 @@ public class MemoryAllocation {
                     break;
                 }
                 case 5: {
+                    my.showQueue();
+                    break;
+                }
+                case 6: {
                     System.out.println("退出成功！");
                     System.exit(0);
                 }

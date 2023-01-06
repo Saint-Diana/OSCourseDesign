@@ -48,6 +48,7 @@ public class Memory {
 
     /**
      * 正在使用的内存块队列，用于FIFO置换算法
+     * 按照内存块使用的先后顺序进行排列，那么每次置换都将队首内存块（也就是在内存中驻留时间最长的页置换出来）
      */
     private Queue<Integer> queue;
 
@@ -202,7 +203,7 @@ public class Memory {
             //然后对新增的段表项中的每个页表中的页进行内存分配
             for(int i = oldNum;i < process.segmentNum;++i){
                 Segment currentSegment = process.segments.get(i);
-                if(segmentSize.get(i) % blockSize == 0){
+                if(process.segmentSize.get(i) % blockSize == 0){
                     for(int j = 0;j < currentSegment.length;++j){
                         doAllocation(processName, i, j, blockSize);
                     }
@@ -211,7 +212,7 @@ public class Memory {
                     for(int j = 0;j < currentSegment.length - 1;++j){
                         doAllocation(processName, i, j, blockSize);
                     }
-                    doAllocation(processName, i, currentSegment.length - 1, segmentSize.get(i) % blockSize);
+                    doAllocation(processName, i, currentSegment.length - 1, process.segmentSize.get(i) % blockSize);
                 }
             }
         }else{
@@ -361,5 +362,17 @@ public class Memory {
                 System.out.println(j + "\t\t " + currentSegment.pages.get(j).blockId);
             }
         }
+    }
+
+    public void showQueue(){
+        if(queue.isEmpty()){
+            System.out.println("当前没有正在使用的内存块！");
+            return;
+        }
+        System.out.println("当前正在使用的内存块号队列如下：");
+        for(Integer blockId : queue){
+            System.out.print("内存块" + blockId + "  ");
+        }
+        System.out.println();
     }
 }
